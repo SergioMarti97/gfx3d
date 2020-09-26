@@ -1,10 +1,7 @@
-package test3d;
-
 import engine.AbstractGame;
 import engine.GameContainer;
 import engine.gfx.Renderer;
 import engine.gfx.images.Image;
-import engine.gfx.images.ImageTile;
 import engine3d.*;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
@@ -19,37 +16,62 @@ import java.awt.event.KeyEvent;
  * @autor: Sergio Martí Torregrosa. sMartiTo
  * @date: 2020-07-28
  */
-public class Test3DEngine extends AbstractGame {
+public class Engine3D extends AbstractGame {
 
+    /**
+     * The pipeline for render 3D objects
+     */
     private PipeLine pipeLine;
 
-    private ImageTile imageTile;
-
+    /**
+     * The texture of the 3D object
+     */
     private Image texture;
 
+    /**
+     * The mesh which conforms the object
+     */
     private Mesh mesh = new Mesh();
 
-    private Vec4df cubeTranslation = new Vec4df();
+    /**
+     * The translation of the mesh
+     */
+    private Vec4df meshTranslation = new Vec4df();
 
-    private Vec4df cubeRotation = new Vec4df(0.0f, 0.0f, 0.0f);
+    /**
+     * The rotation of the mesh
+     */
+    private Vec4df meshRotation = new Vec4df(0.0f, 0.0f, 0.0f);
 
-    private boolean isPerspectiveProjection = true;
+    /**
+     * The path for the mesh
+     */
+    private String meshPath;
 
-    private Test3DEngine(String title) {
+    /**
+     * The path for the texture
+     */
+    private String texturePath;
+
+    /**
+     * Constructor
+     * @param title the title of the program
+     */
+    Engine3D(String title, String meshPath, String texturePath) {
         super(title);
+        this.meshPath = meshPath;
+        this.texturePath = texturePath;
     }
 
     @Override
     public void initialize(GameContainer gc) {
         pipeLine = new PipeLine(gc);
 
-        /*if ( !mesh.loadFromObjectFile("resources/mountains_texture.obj", true) ) {
+        if ( !mesh.loadFromObjectFile(meshPath, true) ) {
             mesh = pipeLine.getUnitCube();
-        }*/
-        mesh = pipeLine.getUnitCube();
+        }
 
-        imageTile = new ImageTile("/dg_dungeon32.gif", 32, 32);
-        texture = new Image("/Super_Paper_Mario2.png");
+        texture = new Image(texturePath);
     }
 
     /**
@@ -128,22 +150,22 @@ public class Test3DEngine extends AbstractGame {
      */
     private void updateCube(GameContainer gc, float dt) {
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD8) ) {
-            cubeRotation.addToX(0.2f * dt);
+            meshRotation.addToX(0.2f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD2) ) {
-            cubeRotation.addToX(-0.2f * dt);
+            meshRotation.addToX(-0.2f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD4) ) {
-            cubeRotation.addToY(0.2f * dt);
+            meshRotation.addToY(0.2f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD6) ) {
-            cubeRotation.addToY(-0.2f * dt);
+            meshRotation.addToY(-0.2f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD7) ) {
-            cubeRotation.addToZ(0.2f * dt);
+            meshRotation.addToZ(0.2f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD3) ) {
-            cubeRotation.addToZ(-0.2f * dt);
+            meshRotation.addToZ(-0.2f * dt);
         }
     }
 
@@ -152,13 +174,13 @@ public class Test3DEngine extends AbstractGame {
      */
     private void transformCube() {
         Mat4x4 matIdentity = MatrixMath.matrixMakeIdentity();
-        Mat4x4 matRotX = MatrixMath.matrixMakeRotationX(cubeRotation.getX());
+        Mat4x4 matRotX = MatrixMath.matrixMakeRotationX(meshRotation.getX());
         matRotX = MatrixMath.matrixMultiplyMatrix(matIdentity, matRotX);
-        Mat4x4 matRotY = MatrixMath.matrixMakeRotationY(cubeRotation.getY());
+        Mat4x4 matRotY = MatrixMath.matrixMakeRotationY(meshRotation.getY());
         Mat4x4 matRotXY = MatrixMath.matrixMultiplyMatrix(matRotY, matRotX);
-        Mat4x4 matRotZ = MatrixMath.matrixMakeRotationZ(cubeRotation.getZ());
+        Mat4x4 matRotZ = MatrixMath.matrixMakeRotationZ(meshRotation.getZ());
         Mat4x4 matRot = MatrixMath.matrixMultiplyMatrix(matRotXY, matRotZ);
-        Mat4x4 matTranslation = MatrixMath.matrixMakeTranslation(cubeTranslation.getX(), cubeTranslation.getY(), cubeTranslation.getZ());
+        Mat4x4 matTranslation = MatrixMath.matrixMakeTranslation(meshTranslation.getX(), meshTranslation.getY(), meshTranslation.getZ());
         Mat4x4 matRotTrans = MatrixMath.matrixMultiplyMatrix(matRot, matTranslation);
         pipeLine.setTransform(matRotTrans);
     }
@@ -185,78 +207,17 @@ public class Test3DEngine extends AbstractGame {
         }
     }
 
-    /**
-     * This method manage the input user for the projection flag and
-     * updates when the flag changes the projection matrix.
-     * @param gc the object GameContainer with the Input Object
-     */
-    private void updateProjectionMatrix(GameContainer gc) {
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_NUMPAD5) ) {
-            isPerspectiveProjection = !isPerspectiveProjection;
-            if ( isPerspectiveProjection ) {
-                pipeLine.setPerspective(Perspective.NORMAL);
-            } else {
-                pipeLine.setPerspective(Perspective.ORTHOGONAL);
-            }
-        }
-    }
-
-    /**
-     * This method change the texture to render. The new texture is extracted from
-     * the image tile
-     * @param gc the GameContainer object.
-     */
-    private void updateTexture(GameContainer gc) {
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_1) ) {
-            texture = imageTile.getTileImage(0, 0);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_2) ) {
-            texture = imageTile.getTileImage(1, 0);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_3) ) {
-            texture = imageTile.getTileImage(2, 0);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_4) ) {
-            texture = imageTile.getTileImage(0, 3);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_5) ) {
-            texture = imageTile.getTileImage(1, 3);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_6) ) {
-            texture = imageTile.getTileImage(2, 3);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_7) ) {
-            texture = imageTile.getTileImage(6, 5);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_8) ) {
-            texture = imageTile.getTileImage(7, 5);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_9) ) {
-            texture = imageTile.getTileImage(8, 5);
-        }
-        if ( gc.getInput().isKeyDown(KeyEvent.VK_0) ) {
-            texture = imageTile.getTileImage(0, 6);
-        }
-    }
-
     @Override
     public void update(GameContainer gc, float dt) {
         updateRenderFlags(gc);
         updateCamera(gc, dt);
         updateCube(gc, dt);
-        updateProjectionMatrix(gc);
         transformCube();
-        updateTexture(gc);
     }
 
     @Override
     public void render(GameContainer gc, Renderer r) {
         pipeLine.renderMesh(mesh, texture);
-    }
-
-    public static void main(String[] args) {
-        GameContainer gc = new GameContainer(new Test3DEngine("Test 3D Engine"));
-        gc.start();
     }
 
 }

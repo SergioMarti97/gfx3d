@@ -147,11 +147,17 @@ public class Mesh {
             }
             bf.close();
             return true;
+        } catch ( NullPointerException e ) {
+            System.out.println("The path is null");
+            e.printStackTrace();
+            return false;
         } catch ( FileNotFoundException e ) {
-            System.out.println("No se encuentra el fichero.");
+            System.out.println(String.format("The file at %s is not found", path));
+            e.printStackTrace();
             return false;
         } catch ( IOException e ) {
-            System.out.println("No se puede leer el fichero");
+            System.out.println(String.format("The file at %s could not be read", path));
+            e.printStackTrace();
             return false;
         }
     }
