@@ -3,9 +3,8 @@ import engine.GameContainer;
 public class Main {
 
     public static void main(String[] args) {
-
-        Engine3D engine3D;
         String title = "Test 3D Engine";
+        Engine3D engine3D;
 
         if ( args.length > 0 ) {
             engine3D = new Engine3D(title, args[0], args[1]);

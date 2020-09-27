@@ -54,6 +54,16 @@ public class Engine3D extends AbstractGame {
     private String texturePath;
 
     /**
+     * The color of the text
+     */
+    private int textColor = 0xffffffff;
+
+    /**
+     * This flag is for fade off the text when the user click on the screen
+     */
+    private boolean isTextFadingOff = false;
+
+    /**
      * Constructor
      * @param title the title of the program
      */
@@ -71,7 +81,7 @@ public class Engine3D extends AbstractGame {
             mesh = pipeLine.getUnitCube();
         }
 
-        texture = new Image(texturePath);
+        texture = new Image(texturePath != null ? texturePath : "/NotFindTexture.png");
     }
 
     /**
@@ -150,22 +160,22 @@ public class Engine3D extends AbstractGame {
      */
     private void updateCube(GameContainer gc, float dt) {
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD8) ) {
-            meshRotation.addToX(0.2f * dt);
+            meshRotation.addToX(2.0f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD2) ) {
-            meshRotation.addToX(-0.2f * dt);
+            meshRotation.addToX(-2.0f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD4) ) {
-            meshRotation.addToY(0.2f * dt);
+            meshRotation.addToY(2.0f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD6) ) {
-            meshRotation.addToY(-0.2f * dt);
+            meshRotation.addToY(-2.0f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD7) ) {
-            meshRotation.addToZ(0.2f * dt);
+            meshRotation.addToZ(2.0f * dt);
         }
         if ( gc.getInput().isKeyHeld(KeyEvent.VK_NUMPAD3) ) {
-            meshRotation.addToZ(-0.2f * dt);
+            meshRotation.addToZ(-2.0f * dt);
         }
     }
 
@@ -207,17 +217,61 @@ public class Engine3D extends AbstractGame {
         }
     }
 
+    /**
+     * This method updates the text color for the fading off
+     */
+    private void updateText() {
+        int alpha = ((textColor >> 24) & 0xff);
+        if ( isTextFadingOff ) {
+            if ( alpha > 0x00 ) {
+                alpha--;
+            }
+        } else {
+            if ( alpha < 0xff ) {
+                alpha++;
+            }
+        }
+        textColor = alpha << 24 | 0xff << 16 | 0xff << 8 | 0xff;
+    }
+
     @Override
     public void update(GameContainer gc, float dt) {
         updateRenderFlags(gc);
         updateCamera(gc, dt);
         updateCube(gc, dt);
         transformCube();
+        if ( gc.getInput().isButtonDown(1) ) {
+            isTextFadingOff = !isTextFadingOff;
+        }
+        updateText();
+    }
+
+    /**
+     * This method renders all the explanation text
+     * @param r the renderer object
+     */
+    private void renderText(Renderer r) {
+        if ( textColor != 0x00ffffff ) {
+            r.drawText("Use arrows and AWSD for control the camera", 10, 10, textColor);
+            r.drawText("Use mouse wheel for zoom-in or zoom-out", 10, 40, textColor);
+            r.drawText("Numpad for rotate the mesh:", 10, 70, textColor);
+            r.drawText("- 2 & 8 for Y axis rotation", 10, 100, textColor);
+            r.drawText("- 3 & 7 for Y axis rotation", 10, 130, textColor);
+            r.drawText("- 4 & 6 for Y axis rotation", 10, 160, textColor);
+            r.drawText("Texture updates:", 10, 210, textColor);
+            r.drawText("- press 'H' for wire rendering", 10, 240, textColor);
+            r.drawText("- press 'J' for flat rendering", 10, 270, textColor);
+            r.drawText("- press 'K' for smooth flat rendering", 10, 300, textColor);
+            r.drawText("- press 'T' for texture rendering", 10, 330, textColor);
+            r.drawText("- press 'Y' for full texture rendering", 10, 360, textColor);
+            r.drawText("Mouse left click inside the screen occult this explanation", 10, 420, textColor);
+        }
     }
 
     @Override
     public void render(GameContainer gc, Renderer r) {
         pipeLine.renderMesh(mesh, texture);
+        renderText(r);
     }
 
 }

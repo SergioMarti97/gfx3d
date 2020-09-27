@@ -148,7 +148,7 @@ public class Mesh {
             bf.close();
             return true;
         } catch ( NullPointerException e ) {
-            System.out.println("The path is null");
+            System.out.println("The mesh path is null");
             e.printStackTrace();
             return false;
         } catch ( FileNotFoundException e ) {
@@ -162,6 +162,9 @@ public class Mesh {
         }
     }
 
+    /**
+     * This method shows the information of the triangles which conform the mesh
+     */
     public void showInformation() {
         for ( int i = 0; i < tris.size() - 2; i++ ) {
             System.out.println(String.format("Triangulo %d", i));
