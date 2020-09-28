@@ -1,5 +1,5 @@
 .idea
 /out
-.blend
-.blend1
-.mtl
+*.blend
+*.blend1
+*.mtl
