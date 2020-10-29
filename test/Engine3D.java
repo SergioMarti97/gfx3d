@@ -1,5 +1,6 @@
 import engine.AbstractGame;
 import engine.GameContainer;
+import engine.gfx.HexColors;
 import engine.gfx.Renderer;
 import engine.gfx.images.Image;
 import engine3d.*;
@@ -7,6 +8,7 @@ import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
 
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 /**
  * This class is a program to test and debug the good behaviour of the classes from
@@ -81,7 +83,15 @@ public class Engine3D extends AbstractGame {
             mesh = pipeLine.getUnitCube();
         }
 
-        texture = new Image(texturePath != null ? texturePath : "/NotFindTexture.png");
+        if ( texturePath != null ) {
+            texture = new Image(texturePath);
+        } else {
+            int w = 100;
+            int h = 100;
+            int[] p = new int[w * h];
+            Arrays.fill(p, HexColors.MAGENTA);
+            texture = new Image(p, w, h);
+        }
     }
 
     /**

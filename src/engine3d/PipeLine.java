@@ -295,7 +295,7 @@ public class PipeLine {
                             triangleClipped.getBrightness()
                     );
 
-                    textureCorrection(triangleClipped);
+                    textureCorrection(triangleProjected);
 
                     offSetProjectedTriangle(triangleProjected, width, height);
 
@@ -439,11 +439,12 @@ public class PipeLine {
                 }
         );
 
-        ArrayList<Triangle> rasterizeTriangles = rasterizeTriangles(projectedTriangles, screenWidth, screenHeight);
-
         renderer3D.clearDepthBuffer();
 
+        ArrayList<Triangle> rasterizeTriangles = rasterizeTriangles(projectedTriangles, screenWidth, screenHeight);
+
         renderer3D.renderTriangles(rasterizeTriangles, texture);
+
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

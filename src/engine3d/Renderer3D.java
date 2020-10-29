@@ -34,7 +34,7 @@ public class Renderer3D extends Renderer {
     Renderer3D(GameContainer gc) {
         super(gc);
         depthBuffer = new float[pW * pH];
-        clearDepthBuffer();
+        //clearDepthBuffer();
     }
 
     /**
@@ -132,7 +132,7 @@ public class Renderer3D extends Renderer {
         color = calculateColor(color, brightness);
 
         try {
-            if ( tex_w >= depthBuffer[y * pW + x] ) {
+            if ( tex_w > depthBuffer[y * pW + x] ) {
                 setPixel(x, y, color);
                 depthBuffer[y * pW + x] = tex_w;
             }
@@ -432,7 +432,8 @@ public class Renderer3D extends Renderer {
                 triangle.getT()[2].getZ(),
 
                 triangle.getBrightness(),
-                texture);
+                texture
+        );
     }
 
     /**

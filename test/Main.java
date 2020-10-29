@@ -9,7 +9,9 @@ public class Main {
         if ( args.length > 0 ) {
             engine3D = new Engine3D(title, args[0], args[1]);
         } else {
-            engine3D = new Engine3D(title, null, null);
+            engine3D = new Engine3D(title,
+                    null,
+                    null);
         }
 
         GameContainer gc = new GameContainer(engine3D);
