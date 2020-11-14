@@ -3,6 +3,7 @@ import engine.GameContainer;
 import engine.gfx.HexColors;
 import engine.gfx.Renderer;
 import engine.gfx.images.Image;
+import engine.gfx.images.ImageTile;
 import engine3d.*;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
@@ -34,6 +35,10 @@ public class Engine3D extends AbstractGame {
      * The mesh which conforms the object
      */
     private Mesh mesh = new Mesh();
+
+    private Mesh mesh2 = new Mesh();
+
+    private Image texture2;
 
     /**
      * The translation of the mesh
@@ -92,6 +97,13 @@ public class Engine3D extends AbstractGame {
             Arrays.fill(p, HexColors.MAGENTA);
             texture = new Image(p, w, h);
         }
+
+        if ( !mesh2.loadFromObjectFile("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\models3d\\teapot.obj", true) ) {
+            mesh2 = pipeLine.getUnitCube();
+        }
+
+        ImageTile origin = new ImageTile("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\textures\\dg_dungeon32.gif", 32, 32);
+        texture2 = origin.getTileImage(1, 0);
     }
 
     /**
@@ -281,6 +293,8 @@ public class Engine3D extends AbstractGame {
     @Override
     public void render(GameContainer gc, Renderer r) {
         pipeLine.renderMesh(mesh, texture);
+        pipeLine.renderMesh(mesh2, texture2);
+        pipeLine.getRenderer3D().clearDepthBuffer();
         renderText(r);
     }
 

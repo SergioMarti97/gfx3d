@@ -173,12 +173,12 @@ public class Test3DEngine extends AbstractGame {
     public void initialize(GameContainer gc) {
         depthBuffer = new float[gc.getWidth() * gc.getHeight()];
 
-        if ( !mesh.loadFromObjectFile("C:\\Users\\Sergio\\IdeaProjects\\engine-gfx3d\\testresources\\models3d\\mountains_texture.obj", true) ) {
+        if ( !mesh.loadFromObjectFile("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\models3d\\mountains_texture.obj", true) ) {
             mesh = initializationCube();
         }
 
-        imageTile = new ImageTile("C:\\Users\\Sergio\\IdeaProjects\\engine-gfx3d\\testresources\\textures\\dg_dungeon32.gif", 32, 32);
-        texture = new Image("C:\\Users\\Sergio\\IdeaProjects\\engine-gfx3d\\testresources\\textures\\Super_Paper_Mario2.png");
+        imageTile = new ImageTile("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\textures\\dg_dungeon32.gif", 32, 32);
+        texture = new Image("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\textures\\Super_Paper_Mario2.png");
 
         matProjection = buildProjectionMatrix(gc);
         buildCameraMatrices();

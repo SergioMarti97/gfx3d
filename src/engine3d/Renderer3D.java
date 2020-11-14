@@ -34,14 +34,14 @@ public class Renderer3D extends Renderer {
     Renderer3D(GameContainer gc) {
         super(gc);
         depthBuffer = new float[pW * pH];
-        //clearDepthBuffer();
+        clearDepthBuffer();
     }
 
     /**
      * This method clears all the depth buffer, and sets all the values to 0.
      * The size to fill is needed specified.
      */
-    void clearDepthBuffer() {
+    public void clearDepthBuffer() {
         for ( int i = 0; i < pW * pH; i++ ) {
             depthBuffer[i] = 0.0f;
         }
@@ -126,7 +126,7 @@ public class Renderer3D extends Renderer {
                                      float brightness,
                                      Image texture) {
         int color;
-        tex_w = (tex_w == 0.0f)? 1.0f : tex_w;
+        //tex_w = (tex_w == 0.0f)? 1.0f : tex_w;
 
         color = texture.getSample((tex_u / tex_w), (tex_v / tex_w));
         color = calculateColor(color, brightness);

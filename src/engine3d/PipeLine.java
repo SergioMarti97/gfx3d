@@ -439,7 +439,7 @@ public class PipeLine {
                 }
         );
 
-        renderer3D.clearDepthBuffer();
+        //renderer3D.clearDepthBuffer();
 
         ArrayList<Triangle> rasterizeTriangles = rasterizeTriangles(projectedTriangles, screenWidth, screenHeight);
 
