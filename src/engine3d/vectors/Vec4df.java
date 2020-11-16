@@ -1,4 +1,4 @@
-package engine3d;
+package engine3d.vectors;
 
 /**
  * In fact I have seen another 3D engines an this object is

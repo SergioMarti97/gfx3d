@@ -1,4 +1,4 @@
-package engine3d;
+package engine3d.vectors;
 
 /**
  * This class represent a three dimension vector,

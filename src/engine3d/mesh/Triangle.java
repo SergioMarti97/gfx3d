@@ -1,4 +1,7 @@
-package engine3d;
+package engine3d.mesh;
+
+import engine3d.vectors.Vec3df;
+import engine3d.vectors.Vec4df;
 
 /**
  * This class is a representation of a triangle in a 3d space

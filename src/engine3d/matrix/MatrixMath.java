@@ -1,12 +1,33 @@
 package engine3d.matrix;
 
-import engine3d.Triangle;
-import engine3d.Vec3df;
-import engine3d.Vec4df;
+import engine3d.mesh.Mesh;
+import engine3d.mesh.Triangle;
+import engine3d.vectors.Vec3df;
+import engine3d.vectors.Vec4df;
 
 import java.util.ArrayList;
 
+/**
+ * This class contains all the static methods
+ * related with matrix operations
+ *
+ * @class MatrixMath
+ * @author Sergio Martí Torregrosa
+ * @date 18/08/2020
+ */
 public class MatrixMath {
+
+    /**
+     * This method transforms the triangles of a mesh
+     * with the matrix passed on the parameters
+     * @param m the transform
+     * @param mesh the mesh
+     */
+    public static void transformMesh(Mat4x4 m, Mesh mesh) {
+        for ( Triangle triangle : mesh.getTris() ) {
+            triangle.setP(matrixMultiplyVectors(m, triangle.getP()));
+        }
+    }
 
     public static Vec4df matrixMultiplyVector(Mat4x4 m, Vec4df i) {
         Vec4df v = new Vec4df();

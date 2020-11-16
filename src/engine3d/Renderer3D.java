@@ -3,6 +3,7 @@ package engine3d;
 import engine.GameContainer;
 import engine.gfx.Renderer;
 import engine.gfx.images.Image;
+import engine3d.mesh.Triangle;
 
 import java.util.ArrayList;
 

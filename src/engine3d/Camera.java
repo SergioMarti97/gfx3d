@@ -3,6 +3,7 @@ package engine3d;
 import engine.gfx.Renderer;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
+import engine3d.vectors.Vec4df;
 
 /**
  * This class represents the camera for rendering the scene of a 3d world

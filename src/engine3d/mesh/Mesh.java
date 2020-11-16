@@ -1,6 +1,7 @@
-package engine3d;
+package engine3d.mesh;
 
-import engine.gfx.images.Image;
+import engine3d.vectors.Vec3df;
+import engine3d.vectors.Vec4df;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -22,11 +23,6 @@ public class Mesh {
      * The triangles which forms the mesh
      */
     private ArrayList<Triangle> tris;
-
-    /**
-     * The image texture
-     */
-    private Image texture = null;
 
     /**
      * The constructor
@@ -52,27 +48,11 @@ public class Mesh {
     }
 
     /**
-     * the getter for the texture
-     * @return the texture image
-     */
-    public Image getTexture() {
-        return texture;
-    }
-
-    /**
      * The setter for the triangles
      * @param tris the new triangles
      */
     public void setTris(ArrayList<Triangle> tris) {
         this.tris = tris;
-    }
-
-    /**
-     * The setter for the texture
-     * @param texture the new image for the texture
-     */
-    public void setTexture(Image texture) {
-        this.texture = texture;
     }
 
     /**

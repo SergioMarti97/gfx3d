@@ -7,6 +7,9 @@ import engine.gfx.images.ImageTile;
 import engine3d.*;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
+import engine3d.mesh.Mesh;
+import engine3d.mesh.MeshFactory;
+import engine3d.vectors.Vec4df;
 
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
@@ -85,7 +88,7 @@ public class Engine3D extends AbstractGame {
         pipeLine = new PipeLine(gc);
 
         if ( !mesh.loadFromObjectFile(meshPath, true) ) {
-            mesh = pipeLine.getUnitCube();
+            mesh = MeshFactory.getUnitCube();
         }
 
         if ( texturePath != null ) {
@@ -99,7 +102,7 @@ public class Engine3D extends AbstractGame {
         }
 
         if ( !mesh2.loadFromObjectFile("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\models3d\\teapot.obj", true) ) {
-            mesh2 = pipeLine.getUnitCube();
+            mesh2 = MeshFactory.getUnitCube();
         }
 
         ImageTile origin = new ImageTile("C:\\Users\\Sergio\\IdeaProjects\\ENGINE-PROJECTS\\engine-gfx3d\\testresources\\textures\\dg_dungeon32.gif", 32, 32);

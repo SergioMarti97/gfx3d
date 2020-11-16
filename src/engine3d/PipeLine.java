@@ -4,6 +4,11 @@ import engine.GameContainer;
 import engine.gfx.images.Image;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
+import engine3d.mesh.Mesh;
+import engine3d.mesh.Model;
+import engine3d.mesh.Triangle;
+import engine3d.vectors.Vec3df;
+import engine3d.vectors.Vec4df;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -107,7 +112,6 @@ public class PipeLine {
 
         lightDirection = new Vec4df(0.0f, 0.0f, -1.0f);
         lightDirection.normalize();
-        //lightDirection = MatrixMath.vectorNormalise(lightDirection);
     }
 
     /**
@@ -414,15 +418,7 @@ public class PipeLine {
     }
 
     /**
-     * This method render the mesh
-     * @param mesh the mesh to render
-     */
-    public void renderMesh(Mesh mesh) {
-        renderMesh(mesh, mesh.getTexture());
-    }
-
-    /**
-     * This method render the mesh
+     * This method renders the mesh
      * @param mesh the mesh to render
      * @param texture the texture of the mesh
      */
@@ -439,172 +435,22 @@ public class PipeLine {
                 }
         );
 
-        //renderer3D.clearDepthBuffer();
-
         ArrayList<Triangle> rasterizeTriangles = rasterizeTriangles(projectedTriangles, screenWidth, screenHeight);
 
         renderer3D.renderTriangles(rasterizeTriangles, texture);
+    }
 
+    /**
+     * This method renders a model, a model
+     * contains a mesh of a 3D object and the texture
+     * of the mesh
+     * @param model the 3D model
+     */
+    public void renderModel(Model model) {
+        renderMesh(model.getMesh(), model.getTexture());
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * This method build and returns a unit cube. This is always helpful with 3D debuging.
-     * @return a unit 3D cube.
-     */
-    public Mesh getUnitCube() {
-        Mesh cube = new Mesh();
-
-        ArrayList<Triangle> triangles = new ArrayList<>();
-
-        // SOUTH
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(0.0f, 0.0f, 0.0f),
-                        new Vec4df(0.0f, 1.0f, 0.0f),
-                        new Vec4df(1.0f, 1.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(0.0f, 0.0f),
-                        new Vec3df(1.0f, 0.0f)
-                }));
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(0.0f, 0.0f, 0.0f),
-                        new Vec4df(1.0f, 1.0f, 0.0f),
-                        new Vec4df(1.0f, 0.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(1.0f, 0.0f),
-                        new Vec3df(1.0f, 1.0f)
-                }));
-
-        // EAST
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(1.0f, 0.0f, 0.0f),
-                        new Vec4df(1.0f, 1.0f, 0.0f),
-                        new Vec4df(1.0f, 1.0f, 1.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(0.0f, 0.0f),
-                        new Vec3df(1.0f, 0.0f)
-                }));
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(1.0f, 0.0f, 0.0f),
-                        new Vec4df(1.0f, 1.0f, 1.0f),
-                        new Vec4df(1.0f, 0.0f, 1.0f)},
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(1.0f, 0.0f),
-                        new Vec3df(1.0f, 1.0f)
-                }));
-
-        // NORTH
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(1.0f, 0.0f, 1.0f),
-                        new Vec4df(1.0f, 1.0f, 1.0f),
-                        new Vec4df(0.0f, 1.0f, 1.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(0.0f, 0.0f),
-                        new Vec3df(1.0f, 0.0f)
-                }));
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(1.0f, 0.0f, 1.0f),
-                        new Vec4df(0.0f, 1.0f, 1.0f),
-                        new Vec4df(0.0f, 0.0f, 1.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(1.0f, 0.0f),
-                        new Vec3df(1.0f, 1.0f)
-                }));
-
-        // WEST
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(0.0f, 0.0f, 1.0f),
-                        new Vec4df(0.0f, 1.0f, 1.0f),
-                        new Vec4df(0.0f, 1.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(0.0f, 0.0f),
-                        new Vec3df(1.0f, 0.0f)
-                }));
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(0.0f, 0.0f, 1.0f),
-                        new Vec4df(0.0f, 1.0f, 0.0f),
-                        new Vec4df(0.0f, 0.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(1.0f, 0.0f),
-                        new Vec3df(1.0f, 1.0f)
-                }));
-
-        // TOP
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(0.0f, 1.0f, 0.0f),
-                        new Vec4df(0.0f, 1.0f, 1.0f),
-                        new Vec4df(1.0f, 1.0f, 1.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(0.0f, 0.0f),
-                        new Vec3df(1.0f, 0.0f)
-                }));
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(0.0f, 1.0f, 0.0f),
-                        new Vec4df(1.0f, 1.0f, 1.0f),
-                        new Vec4df(1.0f, 1.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(1.0f, 0.0f),
-                        new Vec3df(1.0f, 1.0f)
-                }));
-
-        // BOTTOM
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(1.0f, 0.0f, 1.0f),
-                        new Vec4df(0.0f, 0.0f, 1.0f),
-                        new Vec4df(0.0f, 0.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(0.0f, 0.0f),
-                        new Vec3df(1.0f, 0.0f)
-                }));
-        triangles.add(new Triangle(
-                new Vec4df[] {
-                        new Vec4df(1.0f, 0.0f, 1.0f),
-                        new Vec4df(0.0f, 0.0f, 0.0f),
-                        new Vec4df(1.0f, 0.0f, 0.0f)
-                },
-                new Vec3df[] {
-                        new Vec3df(0.0f, 1.0f),
-                        new Vec3df(1.0f, 0.0f),
-                        new Vec3df(1.0f, 1.0f)
-                }));
-
-        cube.setTris(triangles);
-
-        return cube;
-    }
 
     public Renderer3D getRenderer3D() {
         return renderer3D;
@@ -624,6 +470,10 @@ public class PipeLine {
 
     public Perspective getPerspective() {
         return perspective;
+    }
+
+    public Vec4df getLightDirection() {
+        return lightDirection;
     }
 
     public void setCamera(Camera camera) {
@@ -655,6 +505,10 @@ public class PipeLine {
     public void setCameraOrigin(Vec4df origin) {
         cameraObj.setOrigin(origin);
         setMatView(cameraObj.getMatView());
+    }
+
+    public void setLightDirection(Vec4df lightDirection) {
+        this.lightDirection = lightDirection;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,10 @@ import engine.gfx.images.ImageTile;
 import engine3d.*;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
+import engine3d.mesh.Mesh;
+import engine3d.mesh.Triangle;
+import engine3d.vectors.Vec3df;
+import engine3d.vectors.Vec4df;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
