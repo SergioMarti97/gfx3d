@@ -1,5 +1,6 @@
 package engine3d.mesh;
 
+import engine.gfx.images.Image;
 import engine3d.vectors.Vec3df;
 import engine3d.vectors.Vec4df;
 
@@ -331,6 +332,20 @@ public class MeshFactory {
         Mesh mesh = new Mesh();
         mesh.loadFromObjectFile(path, hasTexture);
         return mesh;
+    }
+
+    /**
+     * This method resumes all the the lines of
+     * code what loads from a object file a mesh
+     * and the texture of the model
+     * @param meshPath the path where is the mesh
+     * @param texturePath the path where is the texture
+     * @return the model
+     */
+    public static Model getModel(String meshPath, String texturePath) {
+        Mesh mesh = new Mesh();
+        mesh.loadFromObjectFile(meshPath, true);
+        return new Model(mesh, new Image(texturePath));
     }
 
 }
