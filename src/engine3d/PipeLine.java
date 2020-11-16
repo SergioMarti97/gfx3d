@@ -382,11 +382,9 @@ public class PipeLine {
         Triangle triangleToTest;
 
         for ( Triangle triangle : triangles ) {
-
             if ( isInsideScreen(triangle, width, height) ) {
                 finalTriangles.add(triangle);
             } else {
-                // todo aún así sigue siendo muy lento. habría que optimizarlo, pero entonces se tendría que cambiar el algoritmo entero
                 trianglesOutsideScreenQueue.add(triangle);
                 int numNewTriangles = trianglesOutsideScreenQueue.size();
 
@@ -407,9 +405,7 @@ public class PipeLine {
 
                 finalTriangles.addAll(trianglesOutsideScreenQueue);
                 trianglesOutsideScreenQueue.clear();
-
             }
-
         }
 
         numTrianglesDrawn = finalTriangles.size();

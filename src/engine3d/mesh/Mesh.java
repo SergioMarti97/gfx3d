@@ -40,6 +40,17 @@ public class Mesh {
     }
 
     /**
+     * Copy constructor
+     * @param mesh the instance of the mesh to copy the values
+     */
+    public Mesh(Mesh mesh) {
+        tris = new ArrayList<>();
+        for ( Triangle t : mesh.getTris() ) {
+            tris.add(new Triangle(t));
+        }
+    }
+
+    /**
      * The getter for the triangles
      * @return the triangles
      */
