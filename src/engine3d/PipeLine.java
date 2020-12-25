@@ -1,6 +1,7 @@
 package engine3d;
 
 import engine.GameContainer;
+import engine.gfx.Painter;
 import engine.gfx.images.Image;
 import engine3d.matrix.Mat4x4;
 import engine3d.matrix.MatrixMath;
@@ -21,7 +22,7 @@ import java.util.LinkedList;
  * @author Sergio Martí Torregrosa
  * @date 18/08/2020
  */
-public class PipeLine {
+public class PipeLine implements Painter {
 
     /**
      * We need this for the offsetScaleTriangle method.
@@ -414,11 +415,13 @@ public class PipeLine {
     }
 
     /**
-     * This method renders the mesh
+     * This method generalizes all the calculations needed
+     * to get finally the triangles transformed, projected, sorted and rasterized
+     * (and some other transformations needed... see the videos about 3D engine of Javidx9)
      * @param mesh the mesh to render
-     * @param texture the texture of the mesh
+     * @return the triangles all transformed to get drawn on screen
      */
-    public void renderMesh(Mesh mesh, Image texture) {
+    private ArrayList<Triangle> getTrianglesToRender(Mesh mesh) {
         ArrayList<Triangle> transformedTriangles = transformTriangles(mesh);
 
         ArrayList<Triangle> projectedTriangles = projectTriangles(transformedTriangles, screenWidth, screenHeight);
@@ -431,9 +434,24 @@ public class PipeLine {
                 }
         );
 
-        ArrayList<Triangle> rasterizeTriangles = rasterizeTriangles(projectedTriangles, screenWidth, screenHeight);
+        return rasterizeTriangles(projectedTriangles, screenWidth, screenHeight);
+    }
 
-        renderer3D.renderTriangles(rasterizeTriangles, texture);
+    /**
+     * This method renders the mesh
+     * @param mesh the mesh to render
+     * @param texture the texture of the mesh
+     */
+    public void renderMesh(Mesh mesh, Image texture) {
+        renderer3D.renderTriangles(getTrianglesToRender(mesh), texture);
+    }
+
+    public void renderMesh(Mesh mesh, int color) {
+        renderer3D.renderTriangles(getTrianglesToRender(mesh), color);
+    }
+
+    public void renderMesh(Mesh mesh) {
+        renderer3D.renderTriangles(getTrianglesToRender(mesh));
     }
 
     /**

@@ -66,16 +66,12 @@ public class Renderer3D extends Renderer {
         return (a << 24 | newR << 16 | newG << 8 | newB);
     }
 
-    /**
-     * Este método dibuja en pantalla un triangulo relleno.
-     * @param triangle el objeto triangulo a dibujar.
-     */
-    private void drawFlatTriangle(Triangle triangle) {
+    private void drawFlatTriangle(Triangle triangle, int color) {
         drawFillTriangle(
                 (int)triangle.getP()[0].getX(), (int)triangle.getP()[0].getY(),
                 (int)triangle.getP()[1].getX(), (int)triangle.getP()[1].getY(),
                 (int)triangle.getP()[2].getX(), (int)triangle.getP()[2].getY(),
-                triangle.getColor()
+                color
         );
         drawTriangle(
                 (int)triangle.getP()[0].getX(), (int)triangle.getP()[0].getY(),
@@ -86,15 +82,36 @@ public class Renderer3D extends Renderer {
     }
 
     /**
-     * Este método dibuja un triangulo plano relleno, pero sin un borde negro.
+     * Este método dibuja en pantalla un triangulo relleno.
      * @param triangle el objeto triangulo a dibujar.
      */
-    private void drawFlatSmoothTriangle(Triangle triangle) {
+    private void drawFlatTriangle(Triangle triangle) {
+        drawFlatTriangle(triangle, triangle.getColor());
+    }
+
+    private void drawFlatSmoothTriangle(Triangle triangle, int color) {
         drawFillTriangle(
                 (int)triangle.getP()[0].getX(), (int)triangle.getP()[0].getY(),
                 (int)triangle.getP()[1].getX(), (int)triangle.getP()[1].getY(),
                 (int)triangle.getP()[2].getX(), (int)triangle.getP()[2].getY(),
-                triangle.getColor()
+                color
+        );
+    }
+
+    /**
+     * Este método dibuja un triangulo plano relleno, pero sin un borde negro.
+     * @param triangle el objeto triangulo a dibujar.
+     */
+    private void drawFlatSmoothTriangle(Triangle triangle) {
+        drawFlatSmoothTriangle(triangle, triangle.getColor());
+    }
+
+    private void drawWireTriangle(Triangle triangle, int color) {
+        drawTriangle(
+                (int)triangle.getP()[0].getX(), (int)triangle.getP()[0].getY(),
+                (int)triangle.getP()[1].getX(), (int)triangle.getP()[1].getY(),
+                (int)triangle.getP()[2].getX(), (int)triangle.getP()[2].getY(),
+                color
         );
     }
 
@@ -104,12 +121,7 @@ public class Renderer3D extends Renderer {
      * @param triangle el objeto triangulo a dibujar.
      */
     private void drawWireTriangle(Triangle triangle) {
-        drawTriangle(
-                (int)triangle.getP()[0].getX(), (int)triangle.getP()[0].getY(),
-                (int)triangle.getP()[1].getX(), (int)triangle.getP()[1].getY(),
-                (int)triangle.getP()[2].getX(), (int)triangle.getP()[2].getY(),
-                triangle.getColor()
-        );
+        drawWireTriangle(triangle, triangle.getColor());
     }
 
     /**
@@ -441,7 +453,7 @@ public class Renderer3D extends Renderer {
      * This method draws a triangle in any form what is would to draw
      * @param triangle triangle to render.
      */
-    private void renderTriangle(Triangle triangle, Image texture) {
+    private void renderTexturedTriangle(Triangle triangle, Image texture) {
         switch ( renderFlag ) {
             case RENDER_FLAT:
                 drawFlatTriangle(triangle);
@@ -462,6 +474,34 @@ public class Renderer3D extends Renderer {
         }
     }
 
+    private void renderNonTexturedTriangle(Triangle triangle, int color) {
+        switch ( renderFlag ) {
+            case RENDER_FLAT: case RENDER_TEXTURED:
+                drawFlatTriangle(triangle, color);
+                break;
+            case RENDER_SMOOTH_FLAT: case RENDER_FULL_TEXTURED:
+                drawFlatSmoothTriangle(triangle, color);
+                break;
+            case RENDER_WIRE:
+                drawWireTriangle(triangle, color);
+                break;
+        }
+    }
+
+    private void renderNonTexturedTriangle(Triangle triangle) {
+        switch ( renderFlag ) {
+            case RENDER_FLAT: case RENDER_TEXTURED:
+                drawFlatTriangle(triangle);
+                break;
+            case RENDER_SMOOTH_FLAT: case RENDER_FULL_TEXTURED:
+                drawFlatSmoothTriangle(triangle);
+                break;
+            case RENDER_WIRE:
+                drawWireTriangle(triangle);
+                break;
+        }
+    }
+
     /**
      * This method goes over an ArrayList filled with triangles and draws them depending on the render
      * flag which is active.
@@ -469,7 +509,19 @@ public class Renderer3D extends Renderer {
      */
     void renderTriangles(ArrayList<Triangle> triangles, Image texture) {
         for ( Triangle triangle : triangles ) {
-            renderTriangle(triangle, texture);
+            renderTexturedTriangle(triangle, texture);
+        }
+    }
+
+    void renderTriangles(ArrayList<Triangle> triangles, int color) {
+        for ( Triangle triangle : triangles ) {
+            renderNonTexturedTriangle(triangle, color);
+        }
+    }
+
+    void renderTriangles(ArrayList<Triangle> triangles) {
+        for ( Triangle triangle : triangles ) {
+            renderNonTexturedTriangle(triangle);
         }
     }
 
