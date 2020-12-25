@@ -36,7 +36,7 @@ public class Mesh {
      * @param tris the triangles what conform the mesh
      */
     public Mesh(ArrayList<Triangle> tris) {
-        this.tris = tris;
+        this.tris = copyTriangles(tris);
     }
 
     /**
@@ -44,10 +44,21 @@ public class Mesh {
      * @param mesh the instance of the mesh to copy the values
      */
     public Mesh(Mesh mesh) {
-        tris = new ArrayList<>();
-        for ( Triangle t : mesh.getTris() ) {
-            tris.add(new Triangle(t));
+        this(mesh.getTris());
+    }
+
+    /**
+     * This method returns a copied array of triangles as the
+     * triangles passed on the parameter
+     * @param tris the triangles
+     * @return the copied triangles, with different instances
+     */
+    private ArrayList<Triangle> copyTriangles(ArrayList<Triangle> tris) {
+        ArrayList<Triangle> copyTriangles = new ArrayList<>();
+        for ( Triangle t : tris ) {
+            copyTriangles.add(new Triangle(t));
         }
+        return copyTriangles;
     }
 
     /**
@@ -63,7 +74,7 @@ public class Mesh {
      * @param tris the new triangles
      */
     public void setTris(ArrayList<Triangle> tris) {
-        this.tris = tris;
+        this.tris = copyTriangles(tris);
     }
 
     /**
